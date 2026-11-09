@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F7F6F3">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Work">
+<meta name="app-version" content="1.0.0">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+
+<title>Work</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="popup.css">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div class="app" id="app" data-state="idle" data-page="0">
+
+  <header class="hdr">
+    <div class="hdr-date">
+      <span id="hdrDate">Sun 25 Oct</span>
+      <span class="hdr-total"><span class="mono" id="hdrTotal">0:00</span><button class="sync" id="sync" aria-label="Sync status" title="Up to date"><i></i></button></span>
+    </div>
+    <div class="dots" role="tablist" aria-label="Pages">
+      <button class="dot-btn" role="tab" data-page="0" aria-label="Track"><span></span></button>
+      <button class="dot-btn" role="tab" data-page="1" aria-label="Day plan"><span></span></button>
+      <button class="dot-btn" role="tab" data-page="2" aria-label="Today"><span></span></button>
+      <button class="dot-btn" role="tab" data-page="3" aria-label="Week"><span></span></button>
+    </div>
+    <div class="hdr-icons">
+      <button class="icon-btn only-running" id="discardBtn" aria-label="Discard session" title="Discard">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M2 3.5 H12 M5.5 3.5 V2.2 H8.5 V3.5 M3.2 3.5 L3.9 12 H10.1 L10.8 3.5 M5.8 6 V9.8 M8.2 6 V9.8"/></svg>
+      </button>
+      <button class="icon-btn" id="manualBtn" aria-label="Input your own session" title="Input your own">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2.2 L11.8 4.5 L5 11.3 L2.2 11.8 L2.7 9 Z M8.3 3.4 L10.6 5.7"/></svg>
+      </button>
+      <a class="icon-btn" id="sheetBtn" href="#" target="_blank" rel="noopener" aria-label="Open the WORK sheet" title="Open sheet">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><rect x="2" y="2" width="10" height="10" rx="1.2"/><path d="M2 6 H12 M2 9 H12 M6 6 V12"/></svg>
+      </a>
+    </div>
+  </header>
+
+  <main class="pages">
+    <div class="pages-track" id="pagesTrack">
+
+      <!-- Page 0: Track -->
+      <section class="page" id="pageTrack">
+        <div class="block">
+          <div class="task-line">
+            <input id="taskInput" class="task-input" type="text" placeholder="Start now" autocomplete="off" spellcheck="false" aria-label="Task">
+            <svg class="start-arrow" width="28" height="28" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 11 H18 M12 5 L18 11 L12 17"/></svg>
+          </div>
+          <div class="under">
+            <div class="bubbles" id="bubbles"></div>
+            <div class="cat-label" id="catLabel"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Page 1: Day plan (from Second Brain › Today) -->
+      <section class="page" id="pageDay">
+        <div class="block block-day">
+          <div class="lapbar day" id="dayBar" role="meter" aria-label="Logged today against 3:00, cash against 1:00"></div>
+          <div class="rail" id="rail" aria-label="Today's plan"></div>
+          <div class="day-empty" id="dayEmpty" hidden>
+            <span class="day-empty-title">No plan for today yet</span>
+            <span class="hint">Navi writes it to the Today tab in Second Brain. It shows up here on the next open, or tap the sync ring.</span>
+          </div>
+          <div class="day-foot" id="dayFoot"><span id="dayFootLabel">Logged today</span><span class="mono"><b id="dayLogged">0:00</b><span class="faint" id="dayPlanned"></span></span></div>
+        </div>
+      </section>
+
+      <!-- Page 2: Today -->
+      <section class="page" id="pageToday">
+        <div class="block block-stats block-today">
+          <div class="hero">
+            <span class="mono big" id="todayBig">0:00</span>
+            <div class="lapbar" id="loggedMeter" role="meter" aria-label="Logged today against 3:00"></div>
+            <div class="of"><span>of 3:00</span><span class="mono" id="loggedLeft"></span></div>
+          </div>
+          <div class="csub">
+            <span class="lbl">cash</span>
+            <div class="lapbar thin" id="cashMeter" role="meter" aria-label="Cash today against 1:00"></div>
+            <span class="mono" id="cashVal">0:00 <em>/ 1:00</em></span>
+          </div>
+          <div class="quiet" id="dayDone" hidden><i></i>Day done.</div>
+          <div class="pie-wrap small" id="todayPieWrap">
+            <svg id="todayPie" width="72" height="72" viewBox="0 0 72 72" aria-label="Time by category today"></svg>
+            <div class="legend" id="todayLegend"></div>
+          </div>
+          <div class="sessions" id="todaySessions"></div>
+        </div>
+      </section>
+
+      <!-- Page 3: Week (rolling 7 days, today included) -->
+      <section class="page" id="pageWeek">
+        <div class="block block-stats block-week">
+          <div class="stat-top">
+            <div class="stat-head">
+              <span class="mono big" id="weekBig">0:00</span>
+              <span class="mono small muted">avg a day, over 6</span>
+            </div>
+            <div class="week-bars" id="weekBars"></div>
+          </div>
+          <div class="wk-tot">
+            <div class="wk-row"><span class="lbl">logged</span><div class="meter thin" id="weekMeter"><span></span></div><span class="mono" id="weekVal">0:00 <em>/ 18:00</em></span></div>
+            <div class="wk-row"><span class="lbl">cash</span><div class="meter thin" id="weekCashMeter"><span></span></div><span class="mono" id="weekCashVal">0:00 <em>/ 6:00</em></span></div>
+          </div>
+          <div class="pie-wrap" id="pieWrap">
+            <svg id="weekPie" width="92" height="92" viewBox="0 0 92 92" aria-label="Time by category, last 7 days"></svg>
+            <div class="legend" id="weekLegend"></div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="ftr">
+    <button class="timer" id="timerBtn" aria-label="Stop and log session">
+      <span class="mono timer-text" id="timerText"></span>
+      <span class="mono timer-est" id="timerEst"></span>
+      <span class="timer-task muted" id="timerTask"></span>
+      <span class="live-dot" id="liveDot"></span>
+    </button>
+    <div class="toast mono" id="toast" hidden></div>
+  </footer>
+
+  <!-- Input your own -->
+  <div class="overlay" id="manualOverlay" hidden>
+    <div class="sheet">
+      <div class="sheet-head">
+        <span class="eyebrow" id="mTitle">Input your own</span>
+        <button class="icon-btn" id="manualClose" aria-label="Close">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 2 L8 8 M8 2 L2 8"/></svg>
+        </button>
+      </div>
+      <input id="mTask" class="m-task" type="text" placeholder="Task" autocomplete="off" spellcheck="false" aria-label="Task">
+      <div class="bubbles" id="mBubbles"></div>
+      <div class="times">
+        <label>Start<input class="mono" id="mStart" placeholder="--:--" aria-label="Start time"></label>
+        <label>Stop<input class="mono" id="mStop" placeholder="--:--" aria-label="Stop time"></label>
+        <label>Duration<input class="mono" id="mDur" placeholder="-- min" aria-label="Duration"></label>
+      </div>
+      <span class="hint">Start and stop, or just a duration</span>
+      <button class="pill-btn" id="mAdd">Add to sheet</button>
+      <div class="sheet-foot">
+        <button class="link" id="mStartFrom">Start a session from this start time →</button>
+        <button class="link danger" id="mDelete" hidden>Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Failed write -->
+  <div class="overlay" id="failOverlay" hidden>
+    <div class="sheet">
+      <span class="eyebrow">The sheet said no</span>
+      <p class="setup-text" id="failMsg"></p>
+      <div class="row-btns">
+        <button class="pill-btn" id="failRetry">Try again</button>
+        <button class="pill-btn ghost" id="failNoCat">Save without category</button>
+      </div>
+      <button class="link" id="failCopy" hidden>Copy it for the sheet instead →</button>
+      <button class="link danger" id="failDrop">Forget it (stays in the local journal)</button>
+    </div>
+  </div>
+
+  <!-- Progress note on stop (plan items) -->
+  <div class="overlay" id="noteOverlay" hidden>
+    <div class="sheet">
+      <div class="sheet-head">
+        <span class="eyebrow" id="noteTitle">Logged</span>
+        <button class="icon-btn" id="noteClose" aria-label="Skip">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 2 L8 8 M8 2 L2 8"/></svg>
+        </button>
+      </div>
+      <textarea id="noteText" class="note-text" rows="3" placeholder="Where you got up to, or anything extra (optional)" aria-label="Progress note"></textarea>
+      <div class="row-btns">
+        <button class="pill-btn" id="noteDone">Finished</button>
+        <button class="pill-btn ghost" id="notePart">Not finished</button>
+      </div>
+      <span class="hint">Enter for Finished · Esc to skip</span>
+    </div>
+  </div>
+
+  <!-- Sync by hand: copy today's plan state into the sheet -->
+  <div class="overlay" id="syncOverlay" hidden>
+    <div class="sheet">
+      <div class="sheet-head">
+        <span class="eyebrow">Sync by hand</span>
+        <button class="icon-btn" id="syncClose" aria-label="Close">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 2 L8 8 M8 2 L2 8"/></svg>
+        </button>
+      </div>
+      <p class="setup-text">Open Second Brain › Today, then copy and paste each block into the cells shown.</p>
+      <div class="sync-steps" id="syncSteps"></div>
+      <button class="pill-btn ghost" id="syncDone">Done, it's pasted</button>
+    </div>
+  </div>
+
+  <!-- First run -->
+  <div class="overlay setup" id="setupOverlay" hidden>
+    <div class="sheet">
+      <span class="eyebrow">Connect your sheet</span>
+      <p class="setup-text">Paste the Apps Script web app link from the setup steps. It ends in <span class="mono">/exec</span>.</p>
+      <input id="setupUrl" class="mono setup-input" placeholder="https://script.google.com/macros/s/…/exec" aria-label="Web app URL">
+      <button class="pill-btn" id="setupSave">Connect</button>
+      <span class="hint" id="setupStatus"></span>
+      <span class="hint">Work app v1.0.0</span>
+    </div>
+  </div>
+
+</div>
+<script src="shim.js"></script>
+<script src="shared.js"></script>
+<script src="popup.js"></script>
+</body>
+</html>

@@ -343,3 +343,7 @@ input::placeholder { color: var(--ghost); }
 .sync-step b { font-weight: 500; }
 .sync-step.copied { border-color: var(--ok); }
 .sync-step.copied span { color: var(--ok); }
+
+/* tapping an item opens it: its play becomes the obvious next action */
+.pitem.open:not(.running) .prow .play { opacity: 1; color: var(--bg); background: var(--ink); border-color: var(--ink); }
+.pitem.open.done:not(.running) .prow .play { background: var(--muted); border-color: var(--muted); }

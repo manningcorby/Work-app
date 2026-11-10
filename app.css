@@ -36,3 +36,10 @@ body { width: 100%; height: 100vh; height: 100dvh; overflow: hidden; touch-actio
 
 /* overlays fill the screen, sheet sits above the home bar */
 .overlay .sheet { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 24px); }
+
+/* phone: bigger play target */
+@media (max-width: 600px) {
+  .prow { grid-template-columns: 26px minmax(0, 1fr) 40px; }
+  .prow .play { width: 38px; height: 38px; }
+  .prow .play svg { width: 12px; height: 12px; }
+}

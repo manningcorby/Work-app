@@ -43,3 +43,11 @@ body { width: 100%; height: 100vh; height: 100dvh; overflow: hidden; touch-actio
   .prow .play { width: 38px; height: 38px; }
   .prow .play svg { width: 12px; height: 12px; }
 }
+
+/* touch screens keep the last-tapped element "hovered": never let that decide what shows */
+@media (hover: none) {
+  .pitem:hover:not(.open):not(.next):not(.running) .prow .play { opacity: .5; }
+  .pitem:hover:not(.next):not(.running) .name { color: var(--muted); }
+  .pitem.done:hover .name { color: var(--ghost); }
+  .prow .play:hover { border-color: transparent; }
+}

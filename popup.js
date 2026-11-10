@@ -959,7 +959,7 @@
       wrap.querySelector('.name').textContent = r.task;
 
       wrap.querySelector('.node').addEventListener('click', (e) => { e.stopPropagation(); ritual ? toggleRitual(r, items) : tickWork(r, st); });
-      wrap.querySelector('.main').addEventListener('click', () => { open ? expanded.delete(r.row) : expanded.add(r.row); renderDay(); });
+      wrap.querySelector('.main').addEventListener('click', () => { const was = open; expanded.clear(); if (!was) expanded.add(r.row); renderDay(); }); // one open at a time
       const pb = wrap.querySelector('.play');
       if (pb) pb.addEventListener('click', (e) => { e.stopPropagation(); running ? stopSession() : startFromPlan(r); });
 
